@@ -1,0 +1,6 @@
+{
+  "name": "lambda-event-source-mapping-consumer",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT"
+}
