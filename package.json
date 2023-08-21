@@ -2,5 +2,11 @@
   "name": "lambda-event-source-mapping-consumer",
   "version": "0.0.1",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.6.2"
+  },
+  "dependencies": {
+    "except-js": "^0.3.0"
+  }
 }
