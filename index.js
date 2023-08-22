@@ -1,15 +1,14 @@
 const { create } = require("except-js");
 const yup = require("yup");
 
-const NotAnEventSourceMappingEventException = create(
-  "NotAnEventSourceMappingEventException"
+const exceptions = Object.fromEntries(
+  [
+    "NotAnEventSourceMappingEventException",
+    "EventHandlerNotFoundForTypeException",
+    "EventHandlerNotFoundForTypeException",
+    "MessageProcessingFailedException",
+  ].map((name) => [name, create(name)])
 );
-
-const EventHandlerNotFoundForTypeException = create(
-  "EventHandlerNotFoundForTypeException"
-);
-
-const InvalidConfigException = create("InvalidConfigException");
 
 const configSchema = yup
   .object()
@@ -31,6 +30,7 @@ const configSchema = yup
           );
         }
       ),
+    persistence: yup.object(),
   })
   .noUnknown();
 
@@ -39,28 +39,54 @@ module.exports = {
     try {
       configSchema.validateSync(config);
     } catch (error) {
-      throw new InvalidConfigException(error);
+      throw new exceptions.InvalidConfigException(error);
     }
 
-    const { events = {} } = config;
+    const { events = {}, persistence } = config;
 
     return async function (lambdaEvent) {
       const { Records } = lambdaEvent;
       if (!Records)
-        throw new NotAnEventSourceMappingEventException("'Records' is null.");
+        throw new exceptions.NotAnEventSourceMappingEventException(
+          "'Records' is null."
+        );
 
-      for (let event of Records) {
-        const eventHandlingManifest = events[event.type];
+      const processedIds = persistence
+        ? (await persistence.getAll(Records.map(({ messageId }) => messageId)))
+            .filter(({ processed }) => processed)
+            .map(({ messageId }) => messageId)
+        : [];
+
+      for (let message of Records) {
+        const { messageId, body } = message;
+
+        if (processedIds.includes(messageId)) continue;
+
+        const { type } = JSON.parse(body);
+
+        const eventHandlingManifest = events[type];
         if (!eventHandlingManifest)
-          throw new EventHandlerNotFoundForTypeException(
-            `${event.type} not found`
+          throw new exceptions.EventHandlerNotFoundForTypeException(
+            `${type} not found`
           );
-        const { handler } = events[event.type];
-        await handler(event);
+        const { handler } = events[type];
+        try {
+          await handler(message);
+        } catch (exception) {
+          throw new exceptions.MessageProcessingFailedException({
+            messageId,
+            exception,
+          });
+        }
+
+        if (persistence)
+          await persistence.save({
+            messageId,
+            message,
+            processed: true,
+          });
       }
     };
   },
-  NotAnEventSourceMappingEventException,
-  EventHandlerNotFoundForTypeException,
-  InvalidConfigException,
+  ...exceptions,
 };
