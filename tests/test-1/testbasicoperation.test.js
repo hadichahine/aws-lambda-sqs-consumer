@@ -2,6 +2,7 @@ const {
   createSQSConsumer,
   NotAnEventSourceMappingEventException,
   EventHandlerNotFoundForTypeException,
+  InvalidConfigException,
 } = require("./index");
 
 test("test that consumer doesn't accept an event that doesn't have 'Records'", () => {
@@ -65,4 +66,16 @@ test("test that consumer throws exception when it doesn't have the message handl
       ],
     })
   ).toThrow(EventHandlerNotFoundForTypeException);
+});
+
+test("test invalid config", () => {
+  expect(() =>
+    createSQSConsumer({
+      events: {
+        SOME_TYPE: {
+          notHandler() {},
+        },
+      },
+    })
+  ).toThrow(InvalidConfigException);
 });

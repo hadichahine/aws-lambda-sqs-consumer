@@ -1,4 +1,5 @@
 const { create } = require("except-js");
+const yup = require("yup");
 
 const NotAnEventSourceMappingEventException = create(
   "NotAnEventSourceMappingEventException"
@@ -8,8 +9,39 @@ const EventHandlerNotFoundForTypeException = create(
   "EventHandlerNotFoundForTypeException"
 );
 
+const InvalidConfigException = create("InvalidConfigException");
+
+const configSchema = yup
+  .object()
+  .shape({
+    events: yup
+      .object()
+      .default({})
+      .test(
+        "anypropertyname",
+        "Invalid event manifest schema.",
+        function (object) {
+          return Object.entries(object).every(([, value]) =>
+            yup
+              .object()
+              .shape({
+                handler: yup.mixed().required("Handler function is required"),
+              })
+              .isValidSync(value)
+          );
+        }
+      ),
+  })
+  .noUnknown();
+
 module.exports = {
   createSQSConsumer(config = {}) {
+    try {
+      configSchema.validateSync(config);
+    } catch (error) {
+      throw new InvalidConfigException(error);
+    }
+
     const { events = {} } = config;
 
     return function (lambdaEvent) {
@@ -30,4 +62,5 @@ module.exports = {
   },
   NotAnEventSourceMappingEventException,
   EventHandlerNotFoundForTypeException,
+  InvalidConfigException,
 };
