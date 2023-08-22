@@ -44,7 +44,7 @@ module.exports = {
 
     const { events = {} } = config;
 
-    return function (lambdaEvent) {
+    return async function (lambdaEvent) {
       const { Records } = lambdaEvent;
       if (!Records)
         throw new NotAnEventSourceMappingEventException("'Records' is null.");
@@ -56,7 +56,7 @@ module.exports = {
             `${event.type} not found`
           );
         const { handler } = events[event.type];
-        handler(event);
+        await handler(event);
       }
     };
   },
