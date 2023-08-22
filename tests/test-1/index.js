@@ -4,6 +4,10 @@ const NotAnEventSourceMappingEventException = create(
   "NotAnEventSourceMappingEventException"
 );
 
+const EventHandlerNotFoundForTypeException = create(
+  "EventHandlerNotFoundForTypeException"
+);
+
 module.exports = {
   createSQSConsumer(config = {}) {
     const { events = {} } = config;
@@ -13,13 +17,17 @@ module.exports = {
       if (!Records)
         throw new NotAnEventSourceMappingEventException("'Records' is null.");
 
-      const record = Records[0];
-      const { type } = Records[0];
-
-      const { handler } = events[type];
-
-      handler(record);
+      for (let event of Records) {
+        const eventHandlingManifest = events[event.type];
+        if (!eventHandlingManifest)
+          throw new EventHandlerNotFoundForTypeException(
+            `${event.type} not found`
+          );
+        const { handler } = events[event.type];
+        handler(event);
+      }
     };
   },
   NotAnEventSourceMappingEventException,
+  EventHandlerNotFoundForTypeException,
 };

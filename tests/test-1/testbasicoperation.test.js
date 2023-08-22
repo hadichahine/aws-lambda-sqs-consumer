@@ -1,6 +1,7 @@
 const {
   createSQSConsumer,
   NotAnEventSourceMappingEventException,
+  EventHandlerNotFoundForTypeException,
 } = require("./index");
 
 test("test that consumer doesn't accept an event that doesn't have 'Records'", () => {
@@ -14,8 +15,15 @@ test("test that consumer doesn't accept an event that doesn't have 'Records'", (
 test("test that consumer consumes one message with appropriate type", () => {
   const eventTypeAHandlerMock = jest.fn();
 
-  const record = {
+  const eventTypeBHandlerMock = jest.fn();
+
+  const recordA = {
     type: "EVENT_TYPE_A",
+    payload: {},
+  };
+
+  const recordB = {
+    type: "EVENT_TYPE_B",
     payload: {},
   };
 
@@ -24,12 +32,37 @@ test("test that consumer consumes one message with appropriate type", () => {
       EVENT_TYPE_A: {
         handler: eventTypeAHandlerMock,
       },
+      EVENT_TYPE_B: {
+        handler: eventTypeBHandlerMock,
+      },
     },
   });
 
   consumer({
-    Records: [record],
+    Records: [recordA, recordB],
   });
 
-  expect(eventTypeAHandlerMock).toHaveBeenCalledWith(record);
+  expect(eventTypeAHandlerMock).toHaveBeenCalledWith(recordA);
+  expect(eventTypeBHandlerMock).toHaveBeenCalledWith(recordB);
+});
+
+test("test that consumer throws exception when it doesn't have the message handler for type", () => {
+  const consumer = createSQSConsumer({
+    events: {
+      SOME_TYPE: {
+        handler() {},
+      },
+    },
+  });
+
+  expect(() =>
+    consumer({
+      Records: [
+        {
+          type: "SOME_OTHER_TYPE",
+          payload: {},
+        },
+      ],
+    })
+  ).toThrow(EventHandlerNotFoundForTypeException);
 });
