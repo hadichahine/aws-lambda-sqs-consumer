@@ -3,7 +3,7 @@ const {
   NotAnEventSourceMappingEventException,
   EventHandlerNotFoundForTypeException,
   InvalidConfigException,
-} = require("./index");
+} = require("lambda-event-source-mapping-consumer");
 
 test("test that consumer doesn't accept an event that doesn't have 'Records'", async () => {
   const consumer = createSQSConsumer();

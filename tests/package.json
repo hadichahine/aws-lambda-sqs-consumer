@@ -1,0 +1,6 @@
+{
+  "name": "tests",
+  "dependencies": {
+    "lambda-event-source-mapping-consumer": "../"
+  }
+}
