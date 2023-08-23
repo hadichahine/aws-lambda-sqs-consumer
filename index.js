@@ -36,7 +36,7 @@ const configSchema = yup
   .noUnknown();
 
 /**
- * Creates a consumer function that processes messages from an AWS Lambda event,
+ * Creates a consumer function that processes messages from an SQS event source mapping,
  * following the provided configuration.
  *
  * @function

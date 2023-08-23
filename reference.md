@@ -2,7 +2,7 @@
 
 <dl>
 <dt><a href="#createSQSConsumer">createSQSConsumer([config])</a> ⇒ <code><a href="#consumer">consumer</a></code></dt>
-<dd><p>Creates a consumer function that processes messages from an AWS Lambda event,
+<dd><p>Creates a consumer function that processes messages from an SQS event source mapping,
 following the provided configuration.</p>
 </dd>
 <dt><a href="#consumer">consumer(lambdaEvent)</a> ⇒ <code>Promise.&lt;void&gt;</code></dt>
@@ -13,7 +13,7 @@ following the provided configuration.</p>
 <a name="createSQSConsumer"></a>
 
 ## createSQSConsumer([config]) ⇒ [<code>consumer</code>](#consumer)
-Creates a consumer function that processes messages from an AWS Lambda event,
+Creates a consumer function that processes messages from an SQS event source mapping,
 following the provided configuration.
 
 **Kind**: global function  
@@ -45,6 +45,6 @@ An async function that processes messages from an AWS Lambda event, based on the
 
 | Param | Type | Description |
 | --- | --- | --- |
-| lambdaEvent | <code>Object</code> | The Lambda event containing the messages to process. |
+| lambdaEvent | <code>Object</code> | The Lambda event containing the SQS messages to process. |
 | lambdaEvent.Records | <code>Array</code> | An array of message records. |
 
