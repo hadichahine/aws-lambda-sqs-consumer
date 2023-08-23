@@ -4,8 +4,4 @@
 
 ## Example
 
-## Reference
-
-```markdown
-[Link Text](reference.md)
-```
+## [Reference](reference.md)
