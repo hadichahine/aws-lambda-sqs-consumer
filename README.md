@@ -4,4 +4,6 @@
 
 ## Example
 
-## [Reference](reference.md)
+## Reference
+
+The reference can be found [here](reference.md).
