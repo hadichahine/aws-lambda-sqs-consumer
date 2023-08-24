@@ -4,7 +4,7 @@ const {
   MessageProcessingFailedException,
   InvalidConfigException,
   createSQSConsumer,
-} = require("lambda-event-source-mapping-consumer");
+} = require("aws-lambda-sqs-consumer");
 
 const { sqsMessage } = require("./util");
 

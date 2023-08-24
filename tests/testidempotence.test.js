@@ -1,4 +1,4 @@
-const { createSQSConsumer } = require("lambda-event-source-mapping-consumer");
+const { createSQSConsumer } = require("aws-lambda-sqs-consumer");
 const { sqsMessage } = require("./util");
 
 test("test that when message is sent twice it won't be processed again", async () => {

@@ -1,3 +1,11 @@
+## Constants
+
+<dl>
+<dt><a href="#exceptions">exceptions</a></dt>
+<dd><p>All exceptions used within the module.</p>
+</dd>
+</dl>
+
 ## Functions
 
 <dl>
@@ -9,6 +17,21 @@ following the provided configuration.</p>
 <dd><p>An async function that processes messages from an AWS Lambda event, based on the provided configuration.</p>
 </dd>
 </dl>
+
+<a name="exceptions"></a>
+
+## exceptions
+All exceptions used within the module.
+
+**Kind**: global constant  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| InvalidConfigException | <code>InvalidConfigException</code> | Exception thrown for invalid configuration. |
+| NotAnEventSourceMappingEventException | <code>NotAnEventSourceMappingEventException</code> | Exception thrown when 'Records' are missing or null in the event. |
+| EventHandlerNotFoundForTypeException | <code>EventHandlerNotFoundForTypeException</code> | Exception thrown when an event handler is not found for a message type. |
+| MessageProcessingFailedException | <code>MessageProcessingFailedException</code> | Exception thrown when message processing encounters an exception. |
 
 <a name="createSQSConsumer"></a>
 
