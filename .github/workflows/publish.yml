@@ -40,8 +40,8 @@ jobs:
       - name: Publish to npm
         if: success() # Only run if the previous steps were successful
         run: |
-          # echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}" > ~/.npmrc
-          # yarn publish --access public
-          cat package.json | jq '.version'
+          echo "Publishing new version: $(cat package.json | jq -r '.version')"
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_AUTH_TOKEN }}" > ~/.npmrc
+          yarn publish --access public
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
