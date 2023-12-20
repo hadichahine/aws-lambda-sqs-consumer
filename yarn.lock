@@ -1144,10 +1144,10 @@ esprima@^4.0.0:
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
   integrity sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==
 
-except-js@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/except-js/-/except-js-0.3.0.tgz#a1b74c069800b90956b21ce55fe9c2eeb8442805"
-  integrity sha512-XWF3TEhciuNITrptKwlxwx5D8K4CjjbbpE5e2sVKPprtmaxKgXKP6SgxedClwiZbbNnwZbBrJG4qtTCAV2hgDg==
+except-js@0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/except-js/-/except-js-0.4.0.tgz#a994f3cd48c68220fb54a6c5f7d8b60b0da76ffe"
+  integrity sha512-A+gQpJoPctY5Aksa+ZkxQoTHU2GSbgsSGTYkHZ5aL6icI+EH1udCTPBvIXAitFXIIBtjwNbbXBSLdiBhKMOOJQ==
 
 execa@^5.0.0:
   version "5.1.1"
